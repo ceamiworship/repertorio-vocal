@@ -7,14 +7,13 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-    <header class="wrap header">
-            <div class="headerText">
-                <h1>Repertório do Vocal</h1>
-                <p class="muted">Veja quem canta cada louvor (tom e domínio 1–10) e os 10 louvores de cada vocal.</p>
-            </div>
-        <div class="badge" id="dataStatus">Dados: padrão</div>
-    </header>
-
+  <header class="wrap header">
+    <div class="headerText">
+      <h1>Repertório do Vocal</h1>
+      <p class="muted">Veja quem canta cada louvor (tom e domínio 1–10) e os 10 louvores de cada vocal.</p>
+    </div>
+    <div class="badge" id="dataStatus">Dados: padrão</div>
+  </header>
 
   <main class="wrap">
     <section class="card">
@@ -22,8 +21,8 @@
         <div class="field">
           <label for="view">Visualização</label>
           <select id="view">
-            <option value="songs">Por Louvor</option>
-            <option value="members" selected>Por Pessoa</option>
+            <option value="songs">Por música (quem canta)</option>
+            <option value="members" selected>Por pessoa</option>
           </select>
         </div>
 
@@ -52,7 +51,6 @@
       </div>
 
       <div class="divider"></div>
-
       <div class="grid" id="results"></div>
     </section>
 

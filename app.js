@@ -64,6 +64,12 @@
     return data.songs.find(s => s.id === id);
   }
 
+  function youtubeSearchUrl(song) {
+    const artist = song?.artist ? ` ${song.artist}` : "";
+    const q = `${song?.title || ""}${artist}`.trim();
+    return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
+  }
+
   function rankMatches(rankValue, assignmentRank) {
     if (rankValue === "all") return true;
     if (rankValue === "1-5") return assignmentRank >= 1 && assignmentRank <= 5;
@@ -77,13 +83,10 @@
     const a = normalize(assignmentKey);
     const k = normalize(keyValue);
 
-    // Se o assignment for "E ou F", aceitamos quando filtro for "E" ou "F" ou "E ou F"
     if (a.includes("ou")) {
-      // quebra por "ou"
       const parts = a.split("ou").map(s => s.trim());
       return parts.includes(k) || a === k;
     }
-
     return a === k;
   }
 
@@ -93,7 +96,6 @@
       if (!a.key) continue;
       set.add(a.key.trim());
     }
-    // ordena com locale pt-BR, e empurra os "ou" pro final
     const arr = Array.from(set);
     arr.sort((x, y) => {
       const xo = normalize(x).includes("ou") ? 1 : 0;
@@ -111,7 +113,6 @@
       `<option value="all">Todos</option>` +
       keys.map(k => `<option value="${escapeHtml(k)}">${escapeHtml(k)}</option>`).join("");
 
-    // tenta manter selecionado
     if ([...els.keyFilter.options].some(o => o.value === current)) {
       els.keyFilter.value = current;
     } else {
@@ -119,16 +120,31 @@
     }
   }
 
+  function applySavedPrefs() {
+    const savedView = localStorage.getItem(LS_VIEW_KEY);
+    if (savedView === "songs" || savedView === "members") els.view.value = savedView;
+
+    const savedRank = localStorage.getItem(LS_RANK_KEY);
+    if (savedRank && [...els.rank.options].some(o => o.value === savedRank)) {
+      els.rank.value = savedRank;
+    }
+  }
+
+  function songMatchesQuery(song, qn) {
+    if (!qn) return true;
+    return (
+      normalize(song.title).includes(qn) ||
+      normalize(song.artist || "").includes(qn)
+    );
+  }
+
   function renderSongsView(data, q, rankValue, keyValue) {
     const qn = normalize(q);
 
-    // songId -> assignments filtrados
     const map = new Map();
-
     for (const a of data.assignments) {
       if (!rankMatches(rankValue, a.rank)) continue;
       if (!keyMatches(keyValue, a.key || "")) continue;
-
       if (!map.has(a.songId)) map.set(a.songId, []);
       map.get(a.songId).push(a);
     }
@@ -138,19 +154,20 @@
       .filter(x => x.list.length > 0);
 
     if (qn) {
-      songs = songs.filter(x => normalize(x.song.title).includes(qn));
+      songs = songs.filter(x => songMatchesQuery(x.song, qn));
     }
 
     songs.sort((a, b) => a.song.title.localeCompare(b.song.title, "pt-BR"));
 
     if (!songs.length) {
       els.results.innerHTML =
-        `<div class="item"><h3>Nenhum resultado</h3><div class="meta">Tente mudar a busca, domínio ou tom.</div></div>`;
+        `<div class="item"><h3>Nenhum resultado</h3><div class="meta">Tente mudar busca/domínio/tom.</div></div>`;
       return;
     }
 
     els.results.innerHTML = songs.map(({ song, list }) => {
       const sorted = [...list].sort((x, y) => x.rank - y.rank);
+      const artist = song.artist ? song.artist : "—";
 
       const chips = sorted.map(a => {
         const m = memberById(data, a.memberId);
@@ -161,7 +178,13 @@
 
       return `
         <article class="item">
-          <h3>${escapeHtml(song.title)}</h3>
+          <div class="itemHeader">
+            <div class="itemTitleBlock">
+              <h3>${escapeHtml(song.title)}</h3>
+              <div class="artist">${escapeHtml(artist)}</div>
+            </div>
+            <a class="yt" href="${youtubeSearchUrl(song)}" target="_blank" rel="noopener noreferrer">YouTube</a>
+          </div>
           <div class="meta">Quem canta (domínio • tom):</div>
           <div class="chips">${chips}</div>
         </article>
@@ -191,54 +214,71 @@
         .filter(a => keyMatches(keyValue, a.key || ""))
         .sort((a, b) => a.rank - b.rank);
 
+      // Se tiver busca, filtra por música/artist também (dentro do card)
+      if (qn) {
+        list = list.filter(a => {
+          const s = songById(data, a.songId);
+          if (!s) return false;
+          return songMatchesQuery(s, qn);
+        });
+      }
+
       const chips = list.length
         ? list.map(a => {
             const s = songById(data, a.songId);
             const title = s?.title ?? a.songId;
+            const artist = s?.artist ? ` — ${s.artist}` : "";
             const key = a.key || "-";
-            return `<span class="chip good"><span>#${a.rank} · ${escapeHtml(title)}</span><b>${escapeHtml(key)}</b></span>`;
+            const yt = s ? youtubeSearchUrl(s) : "#";
+            return `
+              <span class="chip good">
+                <span>#${a.rank} · ${escapeHtml(title)}${escapeHtml(artist)}</span>
+                <b>${escapeHtml(key)}</b>
+              </span>
+              <a class="yt" href="${yt}" target="_blank" rel="noopener noreferrer">YouTube</a>
+            `;
           }).join("")
         : `<span class="chip warn"><span>Sem músicas nesse filtro</span><b>—</b></span>`;
+
+      // Para não bagunçar o grid com os botões, criamos bloco separado:
+      const rows = list.length
+        ? list.map(a => {
+            const s = songById(data, a.songId);
+            const title = s?.title ?? a.songId;
+            const artist = s?.artist ? s.artist : "—";
+            const key = a.key || "-";
+            const yt = s ? youtubeSearchUrl(s) : "#";
+            return `
+              <div class="chip good">
+                <span>#${a.rank} · ${escapeHtml(title)} — ${escapeHtml(artist)}</span>
+                <b>${escapeHtml(key)}</b>
+              </div>
+              <a class="yt" href="${yt}" target="_blank" rel="noopener noreferrer">YouTube</a>
+            `;
+          }).join("")
+        : `<div class="chip warn"><span>Sem músicas nesse filtro</span><b>—</b></div>`;
 
       return `
         <article class="item">
           <h3>${escapeHtml(m.name)}</h3>
           <div class="meta">Top 10 (domínio):</div>
-          <div class="chips">${chips}</div>
+          <div class="chips" style="grid-template-columns: 1fr auto;">
+            ${rows}
+          </div>
         </article>
       `;
     }).join("");
-  }
-
-  function applySavedPrefs() {
-    const savedView = localStorage.getItem(LS_VIEW_KEY);
-    if (savedView === "songs" || savedView === "members") els.view.value = savedView;
-
-    const savedRank = localStorage.getItem(LS_RANK_KEY);
-    if (savedRank && [...els.rank.options].some(o => o.value === savedRank)) {
-      els.rank.value = savedRank;
-    }
-
-    const savedKey = localStorage.getItem(LS_KEYFILTER_KEY);
-    if (savedKey) {
-      // não setamos aqui ainda, porque as options são montadas após carregar dados
-      // fica pro renderKeyOptions + validação
-    }
   }
 
   function render() {
     const { data, status } = loadData();
     els.dataStatus.textContent = `Dados: ${status}`;
 
-    // monta filtro de tom baseado nos dados
     renderKeyOptions(data);
-
-    // aplica preferências (view/rank) e tenta aplicar keyFilter salvo
     applySavedPrefs();
 
     const savedKey = localStorage.getItem(LS_KEYFILTER_KEY);
     if (savedKey && [...els.keyFilter.options].some(o => normalize(o.value) === normalize(savedKey))) {
-      // encontra option exata (caso encoding etc)
       const opt = [...els.keyFilter.options].find(o => normalize(o.value) === normalize(savedKey));
       if (opt) els.keyFilter.value = opt.value;
     }
@@ -251,7 +291,6 @@
     if (view === "songs") renderSongsView(data, q, rankValue, keyValue);
     else renderMembersView(data, q, rankValue, keyValue);
 
-    // Admin JSON
     els.adminJson.value = JSON.stringify(data, null, 2);
   }
 

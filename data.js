@@ -1,6 +1,3 @@
-// Dados extraídos do TXT do grupo VOCAL CEAMI WORSHIP (listas 1–10 por domínio)
-// Observação: nomes foram normalizados para evitar duplicados (ex.: "Oh"/"O" quão lindo esse nome é).
-
 window.APP_DATA_DEFAULT = {
   members: [
     { id: "ana", name: "Ana" },
@@ -17,81 +14,78 @@ window.APP_DATA_DEFAULT = {
     { id: "davi", name: "Davi" },
   ],
 
-  // Catálogo (somente títulos canônicos)
   songs: [
-    { id: "em-teu-nome", title: "Em Teu Nome" },
-    { id: "yeshua", title: "Yeshua" },
-    { id: "eu-te-louvarei", title: "Eu Te Louvarei" },
-    { id: "alem-do-impossivel", title: "Além do Impossível" },
-    { id: "jesus-em-tua-presenca", title: "Jesus em Tua Presença" },
-    { id: "teu-toque", title: "Teu Toque" },
-    { id: "tu-es-bom", title: "Tu És Bom" },
-    { id: "paz-sem-fim", title: "Paz Sem Fim" },
-    { id: "eu-me-rendo", title: "Eu Me Rendo" },
-    { id: "filho-do-deus-vivo", title: "Filho do Deus Vivo" },
+    { id: "em-teu-nome", title: "Em Teu Nome", artist: "Family Worship" },
+    { id: "yeshua", title: "Yeshua", artist: "Bianca Azevedo" },
+    { id: "eu-te-louvarei", title: "Eu Te Louvarei", artist: "" },
+    { id: "alem-do-impossivel", title: "Além do Impossível", artist: "Felipe Rodrigues" },
+    { id: "jesus-em-tua-presenca", title: "Jesus em Tua Presença", artist: "Morada" },
+    { id: "teu-toque", title: "Teu Toque", artist: "Gabi Sampaio" },
+    { id: "tu-es-bom", title: "Tu És Bom", artist: "Nívea Soares" },
+    { id: "paz-sem-fim", title: "Paz Sem Fim", artist: "Carol Braga" },
+    { id: "eu-me-rendo", title: "Eu Me Rendo", artist: "Ministério Mergulhar" },
+    { id: "filho-do-deus-vivo", title: "Filho do Deus Vivo", artist: "Nívea Soares" },
 
-    { id: "agnus-dei", title: "Agnus Dei" },
-    { id: "clamo-jesus", title: "Clamo Jesus" },
-    { id: "levanto-um-aleluia", title: "Levanto Um Aleluia" },
-    { id: "oh-quao-lindo-esse-nome-e", title: "Oh Quão Lindo Esse Nome É" },
-    { id: "poderoso-deus", title: "Poderoso Deus" },
-    { id: "sublime", title: "Sublime" },
-    { id: "vida-aos-sepulcros", title: "Vida Aos Sepulcros" },
+    { id: "agnus-dei", title: "Agnus Dei", artist: "Gabriela Rocha" },
+    { id: "clamo-jesus", title: "Clamo Jesus", artist: "Paulo Cesar Baruk" },
+    { id: "levanto-um-aleluia", title: "Levanto Um Aleluia", artist: "Isaías Saad" },
+    { id: "oh-quao-lindo-esse-nome-e", title: "Oh Quão Lindo Esse Nome É", artist: "Felipe Rodrigues" },
+    { id: "poderoso-deus", title: "Poderoso Deus", artist: "Antonio Cirilo" },
+    { id: "sublime", title: "Sublime", artist: "FHOP Music" },
+    { id: "vida-aos-sepulcros", title: "Vida Aos Sepulcros", artist: "Gabriela Rocha" },
 
-    { id: "tudo-e-perda", title: "Tudo É Perda" },
-    { id: "preciso-de-ti", title: "Preciso de Ti" },
-    { id: "tudo-e-teu", title: "Tudo É Teu" },
-    { id: "e-ele", title: "É Ele" },
-    { id: "que-ele-cresca", title: "Que Ele Cresça" },
-    { id: "quem-e-como-nosso-deus", title: "Quem É Como Nosso Deus?" },
-    { id: "mais-do-que-tudo", title: "Mais do Que Tudo" },
-    { id: "a-ele-a-gloria", title: "A Ele a Glória" },
+    { id: "tudo-e-perda", title: "Tudo É Perda", artist: "Felipe Rodrigues" },
+    { id: "preciso-de-ti", title: "Preciso de Ti", artist: "" },
+    { id: "tudo-e-teu", title: "Tudo É Teu", artist: "Drops INA" },
+    { id: "e-ele", title: "É Ele", artist: "Drops INA" },
+    { id: "que-ele-cresca", title: "Que Ele Cresça", artist: "Deigma Marques" },
+    { id: "quem-e-como-nosso-deus", title: "Quem É Como Nosso Deus?", artist: "" },
+    { id: "mais-do-que-tudo", title: "Mais do Que Tudo", artist: "Thamires Garcia" },
+    { id: "a-ele-a-gloria", title: "A Ele a Glória", artist: "" },
 
-    { id: "a-espreita-de-ti", title: "À Espreita de Ti" },
-    { id: "santo", title: "Santo" },
-    { id: "so-tu-es-santo", title: "Só Tu És Santo" },
-    { id: "maravilhosa-graca", title: "Maravilhosa Graça" },
-    { id: "tua-igreja-canta", title: "Tua Igreja Canta" },
+    { id: "a-espreita-de-ti", title: "À Espreita de Ti", artist: "" },
+    { id: "santo", title: "Santo", artist: "Isaías Saad" },
+    { id: "so-tu-es-santo", title: "Só Tu És Santo", artist: "Morada" },
+    { id: "maravilhosa-graca", title: "Maravilhosa Graça", artist: "Drops INA" },
+    { id: "tua-igreja-canta", title: "Tua Igreja Canta", artist: "Israel Salazar" },
 
-    { id: "cristo", title: "Cristo" },
-    { id: "dependo-de-ti", title: "Dependo de Ti" },
-    { id: "glorioso-dia", title: "Glorioso Dia" },
-    { id: "toda-terra", title: "Toda Terra" },
+    { id: "cristo", title: "Cristo", artist: "Som do Reino" },
+    { id: "dependo-de-ti", title: "Dependo de Ti", artist: "Paulo Cesar Baruk" },
+    { id: "glorioso-dia", title: "Glorioso Dia", artist: "Edificando Adoradores" },
+    { id: "toda-terra", title: "Toda Terra", artist: "Gabriela Rocha" },
 
-    { id: "ao-que-esta-assentado", title: "Ao Que Está Assentado" },
-    { id: "ha-poder", title: "Há Poder" },
-    { id: "sem-ti-nao-irei", title: "Sem Ti Não Irei" },
-    { id: "milagres", title: "Milagres" },
-    { id: "vem-sobre-nos", title: "Vem Sobre Nós" },
+    { id: "ao-que-esta-assentado", title: "Ao Que Está Assentado", artist: "Altomonte" },
+    { id: "ha-poder", title: "Há Poder", artist: "FHOP Music" },
+    { id: "sem-ti-nao-irei", title: "Sem Ti Não Irei", artist: "Duda Moon" },
+    { id: "milagres", title: "Milagres", artist: "Juliano Son" },
+    { id: "vem-sobre-nos", title: "Vem Sobre Nós", artist: "Os Bravos" },
 
-    { id: "bondade-de-deus", title: "Bondade de Deus" },
-    { id: "meia-noite", title: "Meia Noite" },
-    { id: "que-se-abram-os-ceus", title: "Que Se Abram os Céus" },
-    { id: "ao-lembrarmos", title: "Ao Lembrarmos" },
+    { id: "bondade-de-deus", title: "Bondade de Deus", artist: "Isaías Saad" },
+    { id: "meia-noite", title: "Meia Noite", artist: "FHOP Music" },
+    { id: "que-se-abram-os-ceus", title: "Que Se Abram os Céus", artist: "Nívea Soares" },
+    { id: "ao-lembrarmos", title: "Ao Lembrarmos", artist: "Alessandro Vilas Boas" },
 
-    { id: "me-ama", title: "Me Ama" },
-    { id: "fogo-em-teus-olhos-eu-navegarei", title: "Fogo em Teus Olhos / Eu Navegarei" },
+    { id: "me-ama", title: "Me Ama", artist: "" },
+    { id: "fogo-em-teus-olhos-eu-navegarei", title: "Fogo em Teus Olhos / Eu Navegarei", artist: "Felipe Rodrigues" },
 
-    { id: "teu-amor-nao-falha", title: "Teu Amor Não Falha" },
-    { id: "desperta", title: "Desperta" },
-    { id: "altar", title: "Altar" },
+    { id: "teu-amor-nao-falha", title: "Teu Amor Não Falha", artist: "Nívea Soares" },
+    { id: "desperta", title: "Desperta", artist: "Ana Nóbrega" },
+    { id: "altar", title: "Altar", artist: "" },
 
-    { id: "veste-de-louvor", title: "Vestes de Louvor" },
-    { id: "essa-casa-e-sua-casa", title: "Essa Casa É Sua Casa" },
+    { id: "veste-de-louvor", title: "Vestes de Louvor", artist: "Asaph Borba" },
+    { id: "essa-casa-e-sua-casa", title: "Essa Casa É Sua Casa", artist: "" },
 
-    { id: "quem-e-esse", title: "Quem É Esse" },
-    { id: "tao-profundo", title: "Tão Profundo" },
-    { id: "a-tua-mesa-cura", title: "A Tua Mesa Cura" },
+    { id: "quem-e-esse", title: "Quem É Esse?", artist: "Julliany Souza" },
+    { id: "tao-profundo", title: "Tão Profundo", artist: "Tape" },
+    { id: "a-tua-mesa-cura", title: "A Tua Mesa Cura", artist: "Thamires Garcia" },
 
-    { id: "redentor", title: "Redentor" },
-    { id: "maranata", title: "Maranata" },
-    { id: "senhor-tu-es-bom", title: "Senhor, Tu És Bom" },
-    { id: "me-ama-gratidao", title: "Me Ama + Gratidão" },
+    { id: "redentor", title: "Redentor", artist: "Lukas Agustinho" },
+    { id: "maranata", title: "Maranata", artist: "Alessandro Vilas Boas" },
+    { id: "senhor-tu-es-bom", title: "Senhor, Tu És Bom", artist: "CEISZ" },
+    { id: "me-ama-gratidao", title: "Me Ama + Gratidão", artist: "Alanderson" },
   ],
 
-  // Relacionamento: quem canta o quê + rank (1-10) + tom (por pessoa)
   assignments: [
-    // ANA
     { memberId: "ana", songId: "em-teu-nome", rank: 1, key: "E" },
     { memberId: "ana", songId: "yeshua", rank: 2, key: "G" },
     { memberId: "ana", songId: "eu-te-louvarei", rank: 3, key: "C" },
@@ -103,7 +97,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "ana", songId: "eu-me-rendo", rank: 9, key: "G" },
     { memberId: "ana", songId: "filho-do-deus-vivo", rank: 10, key: "E" },
 
-    // DANIELA
     { memberId: "daniela", songId: "agnus-dei", rank: 1, key: "F" },
     { memberId: "daniela", songId: "alem-do-impossivel", rank: 2, key: "Db" },
     { memberId: "daniela", songId: "clamo-jesus", rank: 3, key: "C" },
@@ -115,7 +108,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "daniela", songId: "teu-toque", rank: 9, key: "G" },
     { memberId: "daniela", songId: "vida-aos-sepulcros", rank: 10, key: "C" },
 
-    // ELISAMA
     { memberId: "elisama", songId: "tudo-e-perda", rank: 1, key: "C" },
     { memberId: "elisama", songId: "clamo-jesus", rank: 2, key: "C" },
     { memberId: "elisama", songId: "preciso-de-ti", rank: 3, key: "F" },
@@ -127,7 +119,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "elisama", songId: "a-ele-a-gloria", rank: 9, key: "E" },
     { memberId: "elisama", songId: "filho-do-deus-vivo", rank: 10, key: "E" },
 
-    // EDUARDA (obs: "Teu Toque" aparece 2x no TXT; mantive os dois ranks)
     { memberId: "eduarda", songId: "teu-toque", rank: 1, key: "G" },
     { memberId: "eduarda", songId: "a-espreita-de-ti", rank: 2, key: "C" },
     { memberId: "eduarda", songId: "clamo-jesus", rank: 3, key: "C" },
@@ -139,7 +130,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "eduarda", songId: "teu-toque", rank: 9, key: "G" },
     { memberId: "eduarda", songId: "tua-igreja-canta", rank: 10, key: "E" },
 
-    // NICOLAS
     { memberId: "nicolas", songId: "cristo", rank: 1, key: "A" },
     { memberId: "nicolas", songId: "e-ele", rank: 2, key: "A" },
     { memberId: "nicolas", songId: "sublime", rank: 3, key: "C" },
@@ -151,7 +141,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "nicolas", songId: "tudo-e-perda", rank: 9, key: "C" },
     { memberId: "nicolas", songId: "toda-terra", rank: 10, key: "E" },
 
-    // GABRIEL
     { memberId: "gabriel_lima", songId: "ao-que-esta-assentado", rank: 1, key: "A" },
     { memberId: "gabriel_lima", songId: "cristo", rank: 2, key: "G" },
     { memberId: "gabriel_lima", songId: "ha-poder", rank: 3, key: "A" },
@@ -163,7 +152,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "gabriel_lima", songId: "milagres", rank: 9, key: "A" },
     { memberId: "gabriel_lima", songId: "vem-sobre-nos", rank: 10, key: "A" },
 
-    // KAUANE
     { memberId: "kauane", songId: "ao-que-esta-assentado", rank: 1, key: "D" },
     { memberId: "kauane", songId: "bondade-de-deus", rank: 2, key: "G" },
     { memberId: "kauane", songId: "preciso-de-ti", rank: 3, key: "G" },
@@ -175,7 +163,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "kauane", songId: "sem-ti-nao-irei", rank: 9, key: "D" },
     { memberId: "kauane", songId: "ao-lembrarmos", rank: 10, key: "E" },
 
-    // KAUÃ
     { memberId: "kaua", songId: "dependo-de-ti", rank: 1, key: "E" },
     { memberId: "kaua", songId: "me-ama", rank: 2, key: "C" },
     { memberId: "kaua", songId: "fogo-em-teus-olhos-eu-navegarei", rank: 3, key: "F" },
@@ -187,7 +174,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "kaua", songId: "e-ele", rank: 9, key: "A" },
     { memberId: "kaua", songId: "que-ele-cresca", rank: 10, key: "D" },
 
-    // KEILA
     { memberId: "keila", songId: "yeshua", rank: 1, key: "G" },
     { memberId: "keila", songId: "teu-amor-nao-falha", rank: 2, key: "C" },
     { memberId: "keila", songId: "desperta", rank: 3, key: "E" },
@@ -199,7 +185,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "keila", songId: "altar", rank: 9, key: "C" },
     { memberId: "keila", songId: "oh-quao-lindo-esse-nome-e", rank: 10, key: "C" },
 
-    // FILIPE
     { memberId: "filipe", songId: "em-teu-nome", rank: 1, key: "E" },
     { memberId: "filipe", songId: "poderoso-deus", rank: 2, key: "C" },
     { memberId: "filipe", songId: "veste-de-louvor", rank: 3, key: "C" },
@@ -211,7 +196,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "filipe", songId: "e-ele", rank: 9, key: "G" },
     { memberId: "filipe", songId: "que-ele-cresca", rank: 10, key: "C" },
 
-    // GIOVANA
     { memberId: "giovana", songId: "tudo-e-perda", rank: 1, key: "E" },
     { memberId: "giovana", songId: "quem-e-esse", rank: 2, key: "F#" },
     { memberId: "giovana", songId: "tao-profundo", rank: 3, key: "E" },
@@ -223,7 +207,6 @@ window.APP_DATA_DEFAULT = {
     { memberId: "giovana", songId: "mais-do-que-tudo", rank: 9, key: "D" },
     { memberId: "giovana", songId: "teu-toque", rank: 10, key: "Bb" },
 
-    // DAVI
     { memberId: "davi", songId: "so-tu-es-santo", rank: 1, key: "E" },
     { memberId: "davi", songId: "tudo-e-teu", rank: 2, key: "E" },
     { memberId: "davi", songId: "fogo-em-teus-olhos-eu-navegarei", rank: 3, key: "E" },
