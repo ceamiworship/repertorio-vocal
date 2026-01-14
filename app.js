@@ -1,48 +1,23 @@
 (function () {
-  const LS_KEY = "ceami_vocal_data_v1";
-  const LS_VIEW_KEY = "ceami_view_pref_v1";
-  const LS_RANK_KEY = "ceami_rank_pref_v1";
-  const LS_KEYFILTER_KEY = "ceami_key_pref_v1";
-
   const els = {
     view: document.getElementById("view"),
     q: document.getElementById("q"),
+    person: document.getElementById("personSelect"),
     rank: document.getElementById("rank"),
-    keyFilter: document.getElementById("keyFilter"),
+    key: document.getElementById("keyFilter"),
     results: document.getElementById("results"),
+    unusedList: document.getElementById("unusedList"),
+    unusedCount: document.getElementById("unusedCount"),
     dataStatus: document.getElementById("dataStatus"),
-
-    toggleAdmin: document.getElementById("toggleAdmin"),
-    adminArea: document.getElementById("adminArea"),
-    adminJson: document.getElementById("adminJson"),
-    saveData: document.getElementById("saveData"),
-    resetData: document.getElementById("resetData"),
-    copyData: document.getElementById("copyData"),
   };
 
-  function loadData() {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return { data: window.APP_DATA_DEFAULT, status: "padrão" };
-    try {
-      const parsed = JSON.parse(raw);
-      return { data: parsed, status: "local" };
-    } catch {
-      return { data: window.APP_DATA_DEFAULT, status: "padrão" };
-    }
-  }
+  const data = window.APP_DATA_DEFAULT;
 
-  function saveDataToLocal(data) {
-    localStorage.setItem(LS_KEY, JSON.stringify(data, null, 2));
-  }
-
-  function resetLocal() {
-    localStorage.removeItem(LS_KEY);
-  }
-
-  function normalize(str) {
-    return (str || "")
+  function norm(s) {
+    return (s || "")
       .toString()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
       .trim();
   }
@@ -56,298 +31,260 @@
       .replaceAll("'", "&#039;");
   }
 
-  function memberById(data, id) {
-    return data.members.find(m => m.id === id);
-  }
-
-  function songById(data, id) {
-    return data.songs.find(s => s.id === id);
-  }
-
-  function youtubeSearchUrl(song) {
-    const artist = song?.artist ? ` ${song.artist}` : "";
-    const q = `${song?.title || ""}${artist}`.trim();
+  function yt(song) {
+    const q = `${song?.title || ""} ${song?.artist || ""}`.trim();
     return `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
   }
 
-  function rankMatches(rankValue, assignmentRank) {
-    if (rankValue === "all") return true;
-    if (rankValue === "1-5") return assignmentRank >= 1 && assignmentRank <= 5;
-    if (rankValue === "6-10") return assignmentRank >= 6 && assignmentRank <= 10;
-    const exact = parseInt(rankValue, 10);
-    return Number.isFinite(exact) ? assignmentRank === exact : true;
+  function songById(id) {
+    return (data.songs || []).find(s => s.id === id);
   }
 
-  function keyMatches(keyValue, assignmentKey) {
-    if (keyValue === "all") return true;
-    const a = normalize(assignmentKey);
-    const k = normalize(keyValue);
-
-    if (a.includes("ou")) {
-      const parts = a.split("ou").map(s => s.trim());
-      return parts.includes(k) || a === k;
-    }
-    return a === k;
+  function memberById(id) {
+    return (data.members || []).find(m => m.id === id);
   }
 
-  function getAllKeys(data) {
+  function rankPass(rankFilter, rank) {
+    if (rankFilter === "all") return true;
+    if (rankFilter === "1-5") return rank >= 1 && rank <= 5;
+    if (rankFilter === "6-10") return rank >= 6 && rank <= 10;
+    const exact = parseInt(rankFilter, 10);
+    return Number.isFinite(exact) ? rank === exact : true;
+  }
+
+  function keyPass(keyFilter, keyValue) {
+    if (keyFilter === "all") return true;
+    return norm(keyValue) === norm(keyFilter);
+  }
+
+  function fillPersons() {
+    const members = (data.members || []).slice().sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+    els.person.innerHTML =
+      `<option value="">Todas as pessoas</option>` +
+      members.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)}</option>`).join("");
+  }
+
+  function fillKeys() {
     const set = new Set();
-    for (const a of data.assignments || []) {
-      if (!a.key) continue;
-      set.add(a.key.trim());
+    for (const a of (data.assignments || [])) {
+      if (a.key) set.add(a.key.trim());
     }
-    const arr = Array.from(set);
-    arr.sort((x, y) => {
-      const xo = normalize(x).includes("ou") ? 1 : 0;
-      const yo = normalize(y).includes("ou") ? 1 : 0;
-      if (xo !== yo) return xo - yo;
-      return x.localeCompare(y, "pt-BR");
-    });
-    return arr;
-  }
-
-  function renderKeyOptions(data) {
-    const keys = getAllKeys(data);
-    const current = els.keyFilter.value || "all";
-    els.keyFilter.innerHTML =
+    const keys = Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
+    els.key.innerHTML =
       `<option value="all">Todos</option>` +
       keys.map(k => `<option value="${escapeHtml(k)}">${escapeHtml(k)}</option>`).join("");
+  }
 
-    if ([...els.keyFilter.options].some(o => o.value === current)) {
-      els.keyFilter.value = current;
+  function toggleSearchMode() {
+    const byPerson = els.view.value === "members";
+    els.person.classList.toggle("hidden", !byPerson);
+    els.q.classList.toggle("hidden", byPerson);
+
+    if (byPerson) {
+      els.q.value = "";
     } else {
-      els.keyFilter.value = "all";
+      els.person.value = "";
     }
   }
 
-  function applySavedPrefs() {
-    const savedView = localStorage.getItem(LS_VIEW_KEY);
-    if (savedView === "songs" || savedView === "members") els.view.value = savedView;
+  function renderMembers() {
+    const selectedPersonId = els.person.value;
+    const qn = norm(els.q.value);
+    const rankFilter = els.rank.value;
+    const keyFilter = els.key.value;
 
-    const savedRank = localStorage.getItem(LS_RANK_KEY);
-    if (savedRank && [...els.rank.options].some(o => o.value === savedRank)) {
-      els.rank.value = savedRank;
-    }
-  }
+    let members = (data.members || []).slice().sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
 
-  function songMatchesQuery(song, qn) {
-    if (!qn) return true;
-    return (
-      normalize(song.title).includes(qn) ||
-      normalize(song.artist || "").includes(qn)
-    );
-  }
+    if (selectedPersonId) members = members.filter(m => m.id === selectedPersonId);
 
-  function renderSongsView(data, q, rankValue, keyValue) {
-    const qn = normalize(q);
-
-    const map = new Map();
-    for (const a of data.assignments) {
-      if (!rankMatches(rankValue, a.rank)) continue;
-      if (!keyMatches(keyValue, a.key || "")) continue;
-      if (!map.has(a.songId)) map.set(a.songId, []);
-      map.get(a.songId).push(a);
+    // Se estiver em modo texto (quando não é por pessoa), permite filtrar por nome
+    if (qn && els.view.value !== "members") {
+      members = members.filter(m => norm(m.name).includes(qn));
     }
 
-    let songs = data.songs
-      .map(s => ({ song: s, list: map.get(s.id) || [] }))
-      .filter(x => x.list.length > 0);
+    const html = members.map(m => {
+      let list = (data.assignments || [])
+        .filter(a => a.memberId === m.id)
+        .filter(a => rankPass(rankFilter, a.rank))
+        .filter(a => keyPass(keyFilter, a.key || ""))
+        .sort((a, b) => a.rank - b.rank);
 
-    if (qn) {
-      songs = songs.filter(x => songMatchesQuery(x.song, qn));
-    }
+      // Se estiver usando busca texto (fora do select), filtra também por música/cantor
+      if (qn && els.view.value !== "members") {
+        list = list.filter(a => {
+          const s = songById(a.songId);
+          return s ? (norm(s.title).includes(qn) || norm(s.artist || "").includes(qn)) : false;
+        });
+      }
 
-    songs.sort((a, b) => a.song.title.localeCompare(b.song.title, "pt-BR"));
+      const rows = list.map(a => {
+        const s = songById(a.songId) || { title: a.songId, artist: "" };
+        const title = s.title || a.songId;
+        const artist = s.artist || "—";
+        const key = a.key || "—";
 
-    if (!songs.length) {
-      els.results.innerHTML =
-        `<div class="item"><h3>Nenhum resultado</h3><div class="meta">Tente mudar busca/domínio/tom.</div></div>`;
-      return;
-    }
-
-    els.results.innerHTML = songs.map(({ song, list }) => {
-      const sorted = [...list].sort((x, y) => x.rank - y.rank);
-      const artist = song.artist ? song.artist : "—";
-
-      const chips = sorted.map(a => {
-        const m = memberById(data, a.memberId);
-        const name = m?.name ?? a.memberId;
-        const key = a.key || "-";
-        return `<span class="chip good"><span>${escapeHtml(name)} · #${a.rank}</span><b>${escapeHtml(key)}</b></span>`;
+        return `
+          <div class="rowItem">
+            <div class="songText">
+              <div class="line1">#${a.rank}. ${escapeHtml(title)}</div>
+              <div class="line2">${escapeHtml(artist)}</div>
+            </div>
+            <div class="kBadge">${escapeHtml(key)}</div>
+            <a class="yt" href="${yt(s)}" target="_blank" rel="noopener noreferrer">YouTube</a>
+          </div>
+        `;
       }).join("");
 
       return `
         <article class="item">
-          <div class="itemHeader">
-            <div class="itemTitleBlock">
-              <h3>${escapeHtml(song.title)}</h3>
-              <div class="artist">${escapeHtml(artist)}</div>
-            </div>
-            <a class="yt" href="${youtubeSearchUrl(song)}" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <h3>${escapeHtml(m.name)}</h3>
+          <div class="list">
+            ${rows || `<div class="muted">Sem músicas nesse filtro.</div>`}
           </div>
-          <div class="meta">Quem canta (domínio • tom):</div>
-          <div class="chips">${chips}</div>
         </article>
       `;
     }).join("");
+
+    els.results.innerHTML = html || `
+      <article class="item">
+        <h3>Nenhum resultado</h3>
+        <div class="muted">Tente limpar filtros.</div>
+      </article>
+    `;
   }
 
-  function renderMembersView(data, q, rankValue, keyValue) {
-    const qn = normalize(q);
+  function renderSongs() {
+    const qn = norm(els.q.value);
+    const rankFilter = els.rank.value;
+    const keyFilter = els.key.value;
 
-    let members = data.members.slice();
+    // agrupa por música
+    const map = new Map();
+    for (const a of (data.assignments || [])) {
+      if (!rankPass(rankFilter, a.rank)) continue;
+      if (!keyPass(keyFilter, a.key || "")) continue;
+      if (!map.has(a.songId)) map.set(a.songId, []);
+      map.get(a.songId).push(a);
+    }
+
+    let songs = (data.songs || [])
+      .map(s => ({ song: s, list: map.get(s.id) || [] }))
+      .filter(x => x.list.length > 0);
+
     if (qn) {
-      members = members.filter(m => normalize(m.name).includes(qn));
-    }
-    members.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-
-    if (!members.length) {
-      els.results.innerHTML =
-        `<div class="item"><h3>Nenhum vocal encontrado</h3><div class="meta">Tente outra busca.</div></div>`;
-      return;
+      songs = songs.filter(x =>
+        norm(x.song.title).includes(qn) || norm(x.song.artist || "").includes(qn)
+      );
     }
 
-    els.results.innerHTML = members.map(m => {
-      let list = data.assignments
-        .filter(a => a.memberId === m.id)
-        .filter(a => rankMatches(rankValue, a.rank))
-        .filter(a => keyMatches(keyValue, a.key || ""))
-        .sort((a, b) => a.rank - b.rank);
+    songs.sort((a, b) => (a.song.title || "").localeCompare(b.song.title || "", "pt-BR"));
 
-      // Se tiver busca, filtra por música/artist também (dentro do card)
-      if (qn) {
-        list = list.filter(a => {
-          const s = songById(data, a.songId);
-          if (!s) return false;
-          return songMatchesQuery(s, qn);
-        });
-      }
+    const html = songs.map(({ song, list }) => {
+      list.sort((a, b) => a.rank - b.rank);
 
-      const chips = list.length
-        ? list.map(a => {
-            const s = songById(data, a.songId);
-            const title = s?.title ?? a.songId;
-            const artist = s?.artist ? ` — ${s.artist}` : "";
-            const key = a.key || "-";
-            const yt = s ? youtubeSearchUrl(s) : "#";
-            return `
-              <span class="chip good">
-                <span>#${a.rank} · ${escapeHtml(title)}${escapeHtml(artist)}</span>
-                <b>${escapeHtml(key)}</b>
-              </span>
-              <a class="yt" href="${yt}" target="_blank" rel="noopener noreferrer">YouTube</a>
-            `;
-          }).join("")
-        : `<span class="chip warn"><span>Sem músicas nesse filtro</span><b>—</b></span>`;
+      const rows = list.map(a => {
+        const member = memberById(a.memberId);
+        const name = member?.name || a.memberId;
+        const key = a.key || "—";
 
-      // Para não bagunçar o grid com os botões, criamos bloco separado:
-      const rows = list.length
-        ? list.map(a => {
-            const s = songById(data, a.songId);
-            const title = s?.title ?? a.songId;
-            const artist = s?.artist ? s.artist : "—";
-            const key = a.key || "-";
-            const yt = s ? youtubeSearchUrl(s) : "#";
-            return `
-              <div class="chip good">
-                <span>#${a.rank} · ${escapeHtml(title)} — ${escapeHtml(artist)}</span>
-                <b>${escapeHtml(key)}</b>
-              </div>
-              <a class="yt" href="${yt}" target="_blank" rel="noopener noreferrer">YouTube</a>
-            `;
-          }).join("")
-        : `<div class="chip warn"><span>Sem músicas nesse filtro</span><b>—</b></div>`;
+        return `
+          <div class="rowItem">
+            <div class="songText">
+              <div class="line1">${escapeHtml(name)} · #${a.rank}</div>
+              <div class="line2">canta este louvor</div>
+            </div>
+            <div class="kBadge">${escapeHtml(key)}</div>
+            <span class="yt" style="opacity:.55;pointer-events:none;">YouTube</span>
+          </div>
+        `;
+      }).join("");
 
       return `
         <article class="item">
-          <h3>${escapeHtml(m.name)}</h3>
-          <div class="meta">Top 10 (domínio):</div>
-          <div class="chips" style="grid-template-columns: 1fr auto;">
-            ${rows}
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
+            <div>
+              <h3 style="margin:0;">${escapeHtml(song.title || "")}</h3>
+              <div class="muted small">${escapeHtml(song.artist || "—")}</div>
+            </div>
+            <a class="yt" href="${yt(song)}" target="_blank" rel="noopener noreferrer">YouTube</a>
           </div>
+          <div class="divider" style="margin:10px 0;"></div>
+          <div class="list">${rows}</div>
         </article>
       `;
     }).join("");
+
+    els.results.innerHTML = html || `
+      <article class="item">
+        <h3>Nenhum resultado</h3>
+        <div class="muted">Tente limpar busca/filtros.</div>
+      </article>
+    `;
+  }
+
+  function renderUnused() {
+    const used = new Set((data.assignments || []).map(a => a.songId));
+    const unused = (data.songs || [])
+      .filter(s => !used.has(s.id))
+      .sort((a, b) => (a.title || "").localeCompare(b.title || "", "pt-BR"));
+
+    els.unusedCount.textContent = String(unused.length);
+
+    els.unusedList.innerHTML = unused.map(s => {
+      const title = s.title || "";
+      const artist = s.artist || "—";
+      return `
+        <div class="unusedItem">
+          <div class="unusedText">
+            <p class="unusedTitle" title="${escapeHtml(title)}">${escapeHtml(title)}</p>
+            <div class="unusedArtist" title="${escapeHtml(artist)}">${escapeHtml(artist)}</div>
+          </div>
+          <div class="unusedActions">
+            <a class="yt ytSmall" href="${yt(s)}" target="_blank" rel="noopener noreferrer">YouTube</a>
+          </div>
+        </div>
+      `;
+    }).join("") || `
+      <article class="item">
+        <h3>0 músicas</h3>
+        <div class="muted">Todas as músicas do catálogo aparecem em algum Top 10.</div>
+      </article>
+    `;
   }
 
   function render() {
-    const { data, status } = loadData();
-    els.dataStatus.textContent = `Dados: ${status}`;
-
-    renderKeyOptions(data);
-    applySavedPrefs();
-
-    const savedKey = localStorage.getItem(LS_KEYFILTER_KEY);
-    if (savedKey && [...els.keyFilter.options].some(o => normalize(o.value) === normalize(savedKey))) {
-      const opt = [...els.keyFilter.options].find(o => normalize(o.value) === normalize(savedKey));
-      if (opt) els.keyFilter.value = opt.value;
+    if (!data || !data.members || !data.songs || !data.assignments) {
+      els.results.innerHTML = `
+        <article class="item">
+          <h3>Dados não carregaram</h3>
+          <div class="muted">Verifique se <code>data.js</code> está antes de <code>app.js</code>.</div>
+        </article>
+      `;
+      return;
     }
 
-    const view = els.view.value;
-    const q = els.q.value;
-    const rankValue = els.rank.value;
-    const keyValue = els.keyFilter.value;
+    if (els.dataStatus) els.dataStatus.textContent = "Dados: padrão";
 
-    if (view === "songs") renderSongsView(data, q, rankValue, keyValue);
-    else renderMembersView(data, q, rankValue, keyValue);
+    // garante que os selects estão preenchidos
+    if (els.person && els.person.options.length <= 1) fillPersons();
+    if (els.key && els.key.options.length <= 1) fillKeys();
 
-    els.adminJson.value = JSON.stringify(data, null, 2);
+    if (els.view.value === "songs") renderSongs();
+    else renderMembers();
+
+    renderUnused();
   }
 
-  // Admin
-  els.toggleAdmin.addEventListener("click", () => {
-    const isHidden = els.adminArea.classList.contains("hidden");
-    els.adminArea.classList.toggle("hidden");
-    els.toggleAdmin.textContent = isHidden ? "Fechar" : "Abrir";
-    render();
-  });
-
-  els.saveData.addEventListener("click", () => {
-    try {
-      const parsed = JSON.parse(els.adminJson.value);
-      if (!parsed.members || !parsed.songs || !parsed.assignments) {
-        throw new Error("JSON precisa ter members, songs e assignments");
-      }
-      saveDataToLocal(parsed);
-      render();
-      alert("Salvo no navegador!");
-    } catch (e) {
-      alert("Erro no JSON: " + (e?.message || "formato inválido"));
-    }
-  });
-
-  els.resetData.addEventListener("click", () => {
-    resetLocal();
-    render();
-    alert("Voltou ao padrão.");
-  });
-
-  els.copyData.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(els.adminJson.value);
-      alert("JSON copiado!");
-    } catch {
-      alert("Não consegui copiar automaticamente. Selecione e copie manualmente.");
-    }
-  });
-
-  // Preferências + render
-  els.view.addEventListener("change", () => {
-    localStorage.setItem(LS_VIEW_KEY, els.view.value);
-    render();
-  });
-
-  els.rank.addEventListener("change", () => {
-    localStorage.setItem(LS_RANK_KEY, els.rank.value);
-    render();
-  });
-
-  els.keyFilter.addEventListener("change", () => {
-    localStorage.setItem(LS_KEYFILTER_KEY, els.keyFilter.value);
-    render();
-  });
-
+  // Eventos
+  els.view.addEventListener("change", () => { toggleSearchMode(); render(); });
+  els.rank.addEventListener("change", render);
+  els.key.addEventListener("change", render);
   els.q.addEventListener("input", render);
+  els.person.addEventListener("change", render);
 
+  // Init
+  toggleSearchMode();
+  fillPersons();
+  fillKeys();
   render();
 })();

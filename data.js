@@ -5,7 +5,8 @@ window.APP_DATA_DEFAULT = {
     { id: "elisama", name: "Elisama" },
     { id: "eduarda", name: "Eduarda" },
     { id: "nicolas", name: "Nicolas" },
-    { id: "gabriel_lima", name: "Gabriel" },
+    { id: "gabriel_lima", name: "Gabriel Lima" },
+    { id: "gabriel_figueredo", name: "Gabriel Figueredo" },
     { id: "kauane", name: "Kauane" },
     { id: "kaua", name: "Kauã" },
     { id: "keila", name: "Keila" },
@@ -39,11 +40,11 @@ window.APP_DATA_DEFAULT = {
     { id: "tudo-e-teu", title: "Tudo É Teu", artist: "Drops INA" },
     { id: "e-ele", title: "É Ele", artist: "Drops INA" },
     { id: "que-ele-cresca", title: "Que Ele Cresça", artist: "Deigma Marques" },
-    { id: "quem-e-como-nosso-deus", title: "Quem É Como Nosso Deus?", artist: "" },
+    { id: "quem-e-como-nosso-deus", title: "Quem É Como Nosso Deus?", artist: "Nívea Soares" },
     { id: "mais-do-que-tudo", title: "Mais do Que Tudo", artist: "Thamires Garcia" },
-    { id: "a-ele-a-gloria", title: "A Ele a Glória", artist: "" },
+    { id: "a-ele-a-gloria", title: "A Ele a Glória", artist: "Gabriela Rocha" },
 
-    { id: "a-espreita-de-ti", title: "À Espreita de Ti", artist: "" },
+    { id: "a-espreita-de-ti", title: "À Espreita de Ti", artist: "ONE SOUNDS" },
     { id: "santo", title: "Santo", artist: "Isaías Saad" },
     { id: "so-tu-es-santo", title: "Só Tu És Santo", artist: "Morada" },
     { id: "maravilhosa-graca", title: "Maravilhosa Graça", artist: "Drops INA" },
@@ -65,15 +66,15 @@ window.APP_DATA_DEFAULT = {
     { id: "que-se-abram-os-ceus", title: "Que Se Abram os Céus", artist: "Nívea Soares" },
     { id: "ao-lembrarmos", title: "Ao Lembrarmos", artist: "Alessandro Vilas Boas" },
 
-    { id: "me-ama", title: "Me Ama", artist: "" },
+    { id: "me-ama-gratidao", title: "Me Ama", artist: "Alanderson" },
     { id: "fogo-em-teus-olhos-eu-navegarei", title: "Fogo em Teus Olhos / Eu Navegarei", artist: "Felipe Rodrigues" },
 
     { id: "teu-amor-nao-falha", title: "Teu Amor Não Falha", artist: "Nívea Soares" },
     { id: "desperta", title: "Desperta", artist: "Ana Nóbrega" },
-    { id: "altar", title: "Altar", artist: "" },
+    { id: "altar", title: "Altar", artist: "Brasa Church" },
 
     { id: "veste-de-louvor", title: "Vestes de Louvor", artist: "Asaph Borba" },
-    { id: "essa-casa-e-sua-casa", title: "Essa Casa É Sua Casa", artist: "" },
+    { id: "essa-casa-e-sua-casa", title: "Essa Casa É Sua Casa", artist: "Casa Worship" },
 
     { id: "quem-e-esse", title: "Quem É Esse?", artist: "Julliany Souza" },
     { id: "tao-profundo", title: "Tão Profundo", artist: "Tape" },
@@ -83,6 +84,19 @@ window.APP_DATA_DEFAULT = {
     { id: "maranata", title: "Maranata", artist: "Alessandro Vilas Boas" },
     { id: "senhor-tu-es-bom", title: "Senhor, Tu És Bom", artist: "CEISZ" },
     { id: "me-ama-gratidao", title: "Me Ama + Gratidão", artist: "Alanderson" },
+    { id: "a-tua-gloria", title: "A Tua Glória", artist: "Fernanda Brum" },
+    { id: "ate-te-encontrar", title: "Até Te Encontrar", artist: "Be One Music" },
+    { id: "hosana", title: "Hosana", artist: "Julliany Souza" },
+    { id: "leao-lion", title: "LEÃO (LION)", artist: "Elevation Worship" },
+    { id: "nosso-deus-our-god", title: "Nosso Deus (Our God)", artist: "Marcus Salles" },
+    { id: "o-espirito-de-deus-esta-aqui", title: "O Espírito de Deus Está Aqui", artist: "Arianne" },
+    { id: "soberano-medley", title: "Soberano / Digno de Glória / Ao Único / Consagração / Alfa e Ômega / Geração de João Batista", artist: "Paz Church" },
+    { id: "tua-alegria", title: "Tua Alegria", artist: "Drops INA" },
+    { id: "um-so", title: "Um Só", artist: "Nívea Soares" },
+    { id: "um-so-dia", title: "Um Só Dia", artist: "Marcus Salles" },
+
+
+
   ],
 
   assignments: [
@@ -110,7 +124,7 @@ window.APP_DATA_DEFAULT = {
 
     { memberId: "elisama", songId: "tudo-e-perda", rank: 1, key: "C" },
     { memberId: "elisama", songId: "clamo-jesus", rank: 2, key: "C" },
-    { memberId: "elisama", songId: "preciso-de-ti", rank: 3, key: "F" },
+    { memberId: "elisama", songId: "dependo-de-ti", rank: 3, key: "F" },
     { memberId: "elisama", songId: "tudo-e-teu", rank: 4, key: "C" },
     { memberId: "elisama", songId: "e-ele", rank: 5, key: "C" },
     { memberId: "elisama", songId: "que-ele-cresca", rank: 6, key: "G" },
@@ -152,6 +166,17 @@ window.APP_DATA_DEFAULT = {
     { memberId: "gabriel_lima", songId: "milagres", rank: 9, key: "A" },
     { memberId: "gabriel_lima", songId: "vem-sobre-nos", rank: 10, key: "A" },
 
+    { memberId: "gabriel_figueredo", songId: "em-teu-nome", rank: 1, key: "D" },
+    { memberId: "gabriel_figueredo", songId: "redentor", rank: 2, key: "C" },
+    { memberId: "gabriel_figueredo", songId: "poderoso-deus", rank: 3, key: "D" },
+    { memberId: "gabriel_figueredo", songId: "maravilhosa-graca", rank: 4, key: "G" },
+    { memberId: "gabriel_figueredo", songId: "tudo-e-perda", rank: 5, key: "C" },
+    { memberId: "gabriel_figueredo", songId: "so-tu-es-santo", rank: 6, key: "A" },
+    { memberId: "gabriel_figueredo", songId: "quem-e-esse", rank: 7, key: "C" },
+    { memberId: "gabriel_figueredo", songId: "glorioso-dia", rank: 8, key: "D" },
+    { memberId: "gabriel_figueredo", songId: "cristo", rank: 9, key: "G" },
+    { memberId: "gabriel_figueredo", songId: "tua-igreja-canta", rank: 10, key: "B" },
+
     { memberId: "kauane", songId: "ao-que-esta-assentado", rank: 1, key: "D" },
     { memberId: "kauane", songId: "bondade-de-deus", rank: 2, key: "G" },
     { memberId: "kauane", songId: "preciso-de-ti", rank: 3, key: "G" },
@@ -164,7 +189,7 @@ window.APP_DATA_DEFAULT = {
     { memberId: "kauane", songId: "ao-lembrarmos", rank: 10, key: "E" },
 
     { memberId: "kaua", songId: "dependo-de-ti", rank: 1, key: "E" },
-    { memberId: "kaua", songId: "me-ama", rank: 2, key: "C" },
+    { memberId: "kaua", songId: "me-ama-gratidao", rank: 2, key: "C" },
     { memberId: "kaua", songId: "fogo-em-teus-olhos-eu-navegarei", rank: 3, key: "F" },
     { memberId: "kaua", songId: "milagres", rank: 4, key: "C" },
     { memberId: "kaua", songId: "glorioso-dia", rank: 5, key: "E" },

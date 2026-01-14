@@ -3,86 +3,89 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Repertório Vocal - CEAMI Worship</title>
+  <title>Repertório Vocal - CEAMI</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <header class="wrap header">
+
+<header class="wrap header">
+  <div class="headerLeft">
+    <img src="./assets/logo-ceami.png" alt="CEAMI" class="logo" />
     <div class="headerText">
       <h1>Repertório do Vocal</h1>
       <p class="muted">Veja quem canta cada louvor (tom e domínio 1–10) e os 10 louvores de cada vocal.</p>
     </div>
-    <div class="badge" id="dataStatus">Dados: padrão</div>
-  </header>
+  </div>
+  <div class="badge" id="dataStatus">Dados: padrão</div>
+</header>
 
-  <main class="wrap">
-    <section class="card">
-      <div class="controls">
-        <div class="field">
-          <label for="view">Visualização</label>
-          <select id="view">
-            <option value="songs">Por música (quem canta)</option>
-            <option value="members" selected>Por pessoa</option>
-          </select>
-        </div>
+<main class="wrap">
 
-        <div class="field grow">
-          <label for="q">Buscar</label>
-          <input id="q" type="search" placeholder="Digite nome do Louvor ou da Pessoa..." />
-        </div>
+  <section class="card">
+    <div class="controls">
 
-        <div class="field">
-          <label for="rank">Domínio</label>
-          <select id="rank">
-            <option value="all">Todos</option>
-            <option value="1-5">1–5 (domina)</option>
-            <option value="6-10">6–10 (menos domínio)</option>
-            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
-            <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="keyFilter">Tom</label>
-          <select id="keyFilter">
-            <option value="all">Todos</option>
-          </select>
-        </div>
+      <div class="field">
+        <label for="view">Visualização</label>
+        <select id="view">
+          <option value="members" selected>Por pessoa</option>
+          <option value="songs">Por música (quem canta)</option>
+        </select>
       </div>
 
-      <div class="divider"></div>
-      <div class="grid" id="results"></div>
-    </section>
+      <div class="field grow" id="searchWrap">
+        <label for="q">Buscar</label>
 
-    <section class="card">
-      <div class="row between">
-        <h2 class="h2">Modo admin (opcional)</h2>
-        <button class="btn" id="toggleAdmin">Abrir</button>
+        <!-- Busca texto (por música) -->
+        <input id="q" type="search" placeholder="Nome do louvor ou cantor..." />
+
+        <!-- Select (por pessoa) -->
+        <select id="personSelect" class="hidden">
+          <option value="">Todas as pessoas</option>
+        </select>
       </div>
-      <p class="muted">
-        Edita e salva no navegador (localStorage). Se quiser “publicar”, copie o JSON e cole no <code>data.js</code>.
-      </p>
 
-      <div id="adminArea" class="admin hidden">
-        <div class="field">
-          <label for="adminJson">Dados (JSON)</label>
-          <textarea id="adminJson" spellcheck="false"></textarea>
-        </div>
-        <div class="row gap">
-          <button class="btn primary" id="saveData">Salvar no navegador</button>
-          <button class="btn" id="resetData">Voltar ao padrão</button>
-          <button class="btn" id="copyData">Copiar JSON</button>
-        </div>
-        <p class="muted small">Se o JSON estiver inválido, o app avisa.</p>
+      <div class="field">
+        <label for="rank">Domínio</label>
+        <select id="rank">
+          <option value="all">Todos</option>
+          <option value="1-5">1–5 (domina)</option>
+          <option value="6-10">6–10 (menos domínio)</option>
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+          <option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+        </select>
       </div>
-    </section>
 
-    <footer class="muted small center">
-      CEAMI Worship • App estático (VS Code / GitHub Pages)
-    </footer>
-  </main>
+      <div class="field">
+        <label for="keyFilter">Tom</label>
+        <select id="keyFilter">
+          <option value="all">Todos</option>
+        </select>
+      </div>
 
-  <script src="./data.js"></script>
-  <script src="./app.js"></script>
+    </div>
+
+    <div class="divider"></div>
+    <div class="grid" id="results"></div>
+  </section>
+
+  <!-- Seção compacta: músicas que ninguém escolheu -->
+  <section class="card warn unused">
+    <div class="unusedHeader">
+      <h2 class="h2">Músicas que ninguém escolheu</h2>
+      <span class="pill" id="unusedCount">0</span>
+    </div>
+    <p class="muted">Essas músicas não aparecem no Top 10 de nenhum vocal.</p>
+    <div class="divider"></div>
+    <div class="unusedGrid" id="unusedList"></div>
+  </section>
+
+  <footer class="center muted small">
+    CEAMI Worship • GitHub Pages
+  </footer>
+
+</main>
+
+<script src="./data.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
