@@ -80,11 +80,8 @@
     els.person.classList.toggle("hidden", !byPerson);
     els.q.classList.toggle("hidden", byPerson);
 
-    if (byPerson) {
-      els.q.value = "";
-    } else {
-      els.person.value = "";
-    }
+    if (byPerson) els.q.value = "";
+    else els.person.value = "";
   }
 
   function renderMembers() {
@@ -94,10 +91,9 @@
     const keyFilter = els.key.value;
 
     let members = (data.members || []).slice().sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-
     if (selectedPersonId) members = members.filter(m => m.id === selectedPersonId);
 
-    // Se estiver em modo texto (quando não é por pessoa), permite filtrar por nome
+    // Se estiver em modo texto (fora do select), permite filtrar também por nome
     if (qn && els.view.value !== "members") {
       members = members.filter(m => norm(m.name).includes(qn));
     }
@@ -109,7 +105,7 @@
         .filter(a => keyPass(keyFilter, a.key || ""))
         .sort((a, b) => a.rank - b.rank);
 
-      // Se estiver usando busca texto (fora do select), filtra também por música/cantor
+      // Busca por música/cantor no modo texto
       if (qn && els.view.value !== "members") {
         list = list.filter(a => {
           const s = songById(a.songId);
@@ -158,7 +154,6 @@
     const rankFilter = els.rank.value;
     const keyFilter = els.key.value;
 
-    // agrupa por música
     const map = new Map();
     for (const a of (data.assignments || [])) {
       if (!rankPass(rankFilter, a.rank)) continue;
@@ -264,8 +259,6 @@
     }
 
     if (els.dataStatus) els.dataStatus.textContent = "Dados: padrão";
-
-    // garante que os selects estão preenchidos
     if (els.person && els.person.options.length <= 1) fillPersons();
     if (els.key && els.key.options.length <= 1) fillKeys();
 

@@ -163,7 +163,7 @@ input, select{
 
 .songText .line1{
   font-size:13px;
-  font-weight:700;
+  font-weight:800;
   line-height:1.2;
   white-space:normal;
   word-break:break-word;
@@ -185,7 +185,7 @@ input, select{
   border-radius:999px;
   border:1px solid var(--line);
   background: rgba(255,255,255,0.04);
-  font-weight:800;
+  font-weight:900;
   font-size:12px;
 }
 
@@ -203,7 +203,7 @@ input, select{
 
 .yt:hover{border-color:#36508e}
 
-/* ===== Seção "ninguém escolheu" — compacta ===== */
+/* ===== Seção "ninguém escolheu" (desktop: grid compacto) ===== */
 .card.warn.unused{
   padding:16px;
 }
@@ -231,7 +231,7 @@ input, select{
   border:1px solid rgba(245,158,11,0.45);
   background: rgba(245,158,11,0.10);
   color: var(--text);
-  font-weight:800;
+  font-weight:900;
   font-size:12px;
   flex:0 0 auto;
 }
@@ -242,6 +242,7 @@ input, select{
   gap:10px;
 }
 
+/* item compacto no desktop */
 .unusedItem{
   border:1px solid rgba(245,158,11,0.25);
   background: rgba(0,0,0,0.18);
@@ -263,7 +264,7 @@ input, select{
 .unusedTitle{
   margin:0;
   font-size:13px;
-  font-weight:800;
+  font-weight:900;
   line-height:1.2;
   white-space:nowrap;
   overflow:hidden;
@@ -290,7 +291,7 @@ input, select{
   font-size:12px;
 }
 
-/* Mobile */
+/* ✅ Mobile: vira LISTA simples (sem “cardzão” feio) */
 @media (max-width: 720px){
   .wrap{ padding:16px; }
   .header{
@@ -304,8 +305,35 @@ input, select{
     gap:8px;
   }
   .logo{height:64px}
+
   .grid{grid-template-columns:1fr}
-  .unusedGrid{grid-template-columns:1fr}
   .field, .field.grow{min-width:0;width:100%}
   .controls{flex-direction:column;align-items:stretch}
+
+  /* unused vira lista vertical simples */
+  .unusedGrid{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+
+  .unusedItem{
+    border:none;
+    border-bottom:1px solid rgba(245,158,11,0.18);
+    background: transparent;
+    border-radius:0;
+    padding:12px 0;
+  }
+
+  .unusedTitle,
+  .unusedArtist{
+    white-space:normal;
+    overflow:visible;
+    text-overflow:unset;
+    word-break:break-word;
+  }
+
+  .yt.ytSmall{
+    padding:7px 10px;
+  }
 }

@@ -34,11 +34,7 @@
 
       <div class="field grow" id="searchWrap">
         <label for="q">Buscar</label>
-
-        <!-- Busca texto (por música) -->
         <input id="q" type="search" placeholder="Nome do louvor ou cantor..." />
-
-        <!-- Select (por pessoa) -->
         <select id="personSelect" class="hidden">
           <option value="">Todas as pessoas</option>
         </select>
@@ -68,7 +64,6 @@
     <div class="grid" id="results"></div>
   </section>
 
-  <!-- Seção compacta: músicas que ninguém escolheu -->
   <section class="card warn unused">
     <div class="unusedHeader">
       <h2 class="h2">Músicas que ninguém escolheu</h2>
@@ -76,6 +71,8 @@
     </div>
     <p class="muted">Essas músicas não aparecem no Top 10 de nenhum vocal.</p>
     <div class="divider"></div>
+
+    <!-- no desktop vira grid compacto / no mobile vira lista simples -->
     <div class="unusedGrid" id="unusedList"></div>
   </section>
 
